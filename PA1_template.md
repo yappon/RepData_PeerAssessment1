@@ -178,7 +178,7 @@ median(daily_activity$total_steps)
 
 ## (Part4) Are there differences in activity patterns between weekdays and weekends?
 
-### Create a new factor variable in the dataset with two levels: gweekdayh and gweekendh indicating whether a given date is a weekday or weekend day.  
+### Create a new factor variable in the dataset with two levels: "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.  
 
 1. Using "dplyr" library, mutate activity dataframe to have "flag" column (TRUE for weekends, FALSE for weekdays)
 1. add "weekends_weekdays" column
