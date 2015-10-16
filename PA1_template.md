@@ -8,7 +8,8 @@ keep_md: true
 
 ## As the first step
 Loading necessary libraries to be used later steps & set locale
-```{r load library, message=FALSE, warning=FALSE, results="hide"}
+
+```r
 library(dplyr)
 library(lattice)
 Sys.setlocale("LC_TIME", "English")
@@ -17,13 +18,15 @@ Sys.setlocale("LC_TIME", "English")
 ## Loading and preprocessing the data
 ### Load the data  
 Unzip "repdate_data_activity.zip" (please locate the same working directory where the R script runs) and read the csv file inside it
-```{r loading data}
+
+```r
 activity <- read.csv(unzip("repdata_data_activity.zip"))
 ```
 
 ### Process/transform the data (if necessary) into a format suitable for your analysis
 Convert "date" column from character to date data type
-```{r}
+
+```r
 activity$date <- as.Date(activity$date)
 ```
 
@@ -34,7 +37,8 @@ Using "dplyr" library
 1. Filter "NA" step rows
 1. Group by date column
 1. Summarize with total steps by date
-```{r mean total}
+
+```r
 daily_activity <- activity %>% 
         filter(!is.na(steps)) %>% 
         group_by(date) %>% 
@@ -42,15 +46,30 @@ daily_activity <- activity %>%
 ```
 
 ### Make a histogram of the total number of steps taken each day  
-```{r}
+
+```r
 hist(daily_activity$steps, main = "Histogram of step per day", 
      xlab = "Total step per day", breaks = 10)
 ```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+
 ### Calculate and report the mean and median of the total number of steps taken per day
-```{r}
+
+```r
 mean(daily_activity$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(daily_activity$steps)
+```
+
+```
+## [1] 10765
 ```
 The median is less than the mean. 
 
@@ -62,7 +81,8 @@ Using "dplyr" library
 1. Group by interval column
 1. Summarize with calculate average steps by interval
 Then plot the data with line (type="l")
-```{r plot}
+
+```r
 by_interval_activity <- activity %>% 
         filter(!is.na(steps)) %>% 
         group_by(interval) %>% 
@@ -72,16 +92,32 @@ plot(x = by_interval_activity$interval, y = by_interval_activity$average_steps,
      main = "Average steps for each interval across all days")
 ```
 
+![plot of chunk plot](figure/plot-1.png) 
+
 ### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
+
+```r
 by_interval_activity[by_interval_activity$average_steps==max(by_interval_activity$average_steps),]
+```
+
+```
+## Source: local data frame [1 x 2]
+## 
+##   interval average_steps
+##      (int)         (dbl)
+## 1      835      206.1698
 ```
 Interval#835(8:35am) contains the maximum number of average steps (206steps) 
 
 ## (Part3) Imputing missing values
 ### Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r}
+
+```r
 nrow(activity[is.na(activity$step),])
+```
+
+```
+## [1] 2304
 ```
 ### Devise a strategy for filling in all of the missing values in the dataset.
 ### Create a new dataset that is equal to the original dataset but with the missing data filled in.
@@ -89,7 +125,8 @@ Here, I chose to insert by the mean of the 5 interval. (In case of inserting the
 
 1. Merge activity data and by-interval average data (which was created in the 2nd part of the assignment)
 1. Replace "steps" column with "average_steps" column where "steps" is NA
-```{r imputing missing values}
+
+```r
 newActivity <- merge(activity, by_interval_activity, by.x = "interval", by.y = "interval")
 newActivity[is.na(newActivity$steps),]$steps <- newActivity[is.na(newActivity$steps),]$average_steps
 newActivity <- select(newActivity, steps, interval, date)
@@ -100,22 +137,38 @@ Using "dplyr" library (no longer need to filter is.na(steps) rows)
 
 1. Group by date column
 1. Summarize with total steps by date
-```{r}
+
+```r
 daily_activity <- newActivity %>% 
         group_by(date) %>% 
         summarise(total_steps=sum(steps))
 ```
 
 Create histogram
-```{r}
+
+```r
 hist(daily_activity$total_steps, main = "Histogram of Total step per day", 
      xlab = "Total step per day", breaks = 10)
 ```
 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+
 Calculate mean and median
-```{r}
+
+```r
 mean(daily_activity$total_steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(daily_activity$total_steps)
+```
+
+```
+## [1] 10766.19
 ```
 ### Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?  
 
@@ -130,7 +183,8 @@ median(daily_activity$total_steps)
 1. Using "dplyr" library, mutate activity dataframe to have "flag" column (TRUE for weekends, FALSE for weekdays)
 1. add "weekends_weekdays" column
 1. update "weekends_weekdays" column with "weekend" if "flag" column is TRUE or "weekday" if FALSE
-```{r weekdays weekends analysis}
+
+```r
 activity <- activity %>% mutate(flag = weekdays(date) %in% c("Saturday","Sunday"))
 activity <- cbind(activity,weekends_weekdays=NA)
 activity[activity$flag,]$weekends_weekdays <- "weekend"
@@ -142,7 +196,8 @@ Using "dplyr" library
 1. Filter "NA" step rows  
 1. Group by interval and weekends_weekdays columns  
 1. Summarize with total steps by interval, weekends_weekdays  
-```{r}
+
+```r
 activity_analysis <- activity %>%
         filter(!is.na(steps)) %>% 
         group_by(interval, weekends_weekdays) %>% 
@@ -150,10 +205,13 @@ activity_analysis <- activity %>%
 ```
 
 For plotting, using xyplot from "lattice" library  
-```{r}
+
+```r
 xyplot(average_steps ~ interval | weekends_weekdays, data = activity_analysis, 
        layout = c(1, 2), type = "l", ylab = "Number of steps")
 ```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 A few observations from the above plot  
 
