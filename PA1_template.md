@@ -52,7 +52,7 @@ hist(daily_activity$steps, main = "Histogram of step per day",
      xlab = "Total step per day", breaks = 10)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+![plot of part1](figure/part1.png) 
 
 ### Calculate and report the mean and median of the total number of steps taken per day
 
@@ -178,7 +178,7 @@ median(daily_activity$total_steps)
 
 ## (Part4) Are there differences in activity patterns between weekdays and weekends?
 
-### Create a new factor variable in the dataset with two levels: 갾weekday갿 and 갾weekend갿 indicating whether a given date is a weekday or weekend day.  
+### Create a new factor variable in the dataset with two levels: 혖gweekday혖h and 혖gweekend혖h indicating whether a given date is a weekday or weekend day.  
 
 1. Using "dplyr" library, mutate activity dataframe to have "flag" column (TRUE for weekends, FALSE for weekdays)
 1. add "weekends_weekdays" column
