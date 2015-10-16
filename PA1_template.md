@@ -92,7 +92,7 @@ plot(x = by_interval_activity$interval, y = by_interval_activity$average_steps,
      main = "Average steps for each interval across all days")
 ```
 
-![plot of chunk plot](figure/plot-1.png) 
+![plot of part2](figure/part2.png) 
 
 ### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -151,7 +151,7 @@ hist(daily_activity$total_steps, main = "Histogram of Total step per day",
      xlab = "Total step per day", breaks = 10)
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of part3](figure/part3.png) 
 
 Calculate mean and median
 
@@ -211,7 +211,7 @@ xyplot(average_steps ~ interval | weekends_weekdays, data = activity_analysis,
        layout = c(1, 2), type = "l", ylab = "Number of steps")
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+![plot of part4](figure/part4.png) 
 
 A few observations from the above plot  
 
